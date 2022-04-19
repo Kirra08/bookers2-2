@@ -22,8 +22,30 @@
             <td><%= link_to 'Destroy', @book_params, method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger destroy_book_#{@book_params.id}"%>
             <% end %>
             </td>
+            <%= render 'favorite', book: @book_params %>
+            <td><p>コメント数:<%= @book_params.book_comments.count %></p></td>
         </tr>
       </table>
+      <div>
+        <table>
+          <tr>
+            <% @book_params.book_comments.each do |book_comment| %>
+            <th><p><%= image_tag book_comment.user.get_profile_image, size:"100x100" %><br></th>
+            <%= link_to book_comment.user.name, user_path(book_comment.user) %></p>
+            <th><%= book_comment.comment %></th>
+            <% if book_comment.user == current_user %>
+           <th><%= link_to 'Destroy', book_book_comments_path(@book_params), method: :delete, data: { confirm: '本当に消しますか？' }, class: "btn btn-sm btn-danger destroy_book_#{@book_params.id}" %></th>
+            <% end %>
+            <% end %> 
+            </tr>
+            </table>
+      </div>
+      <div>
+        <%= form_with model: [@book_params, @book_comment] do |f| %>
+         <%= f.text_area :comment,  style: "width:100%" %>
+         <%= f.submit "送信する" %>
+         <% end %>
+      </div>
     </div>
   </div>
 </div>
